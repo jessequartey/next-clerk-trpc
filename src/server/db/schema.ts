@@ -10,12 +10,15 @@ import { index, int, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = sqliteTableCreator((name) => `next-clerk-trpc_${name}`);
+export const createTable = sqliteTableCreator(
+  (name) => `next-clerk-trpc_${name}`,
+);
 
 export const posts = createTable(
   "post",
   {
     id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+    userId: text("userId", { length: 256 }),
     name: text("name", { length: 256 }),
     createdAt: int("created_at", { mode: "timestamp" })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -24,5 +27,5 @@ export const posts = createTable(
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
