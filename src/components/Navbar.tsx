@@ -1,6 +1,12 @@
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { Button } from "./ui/button";
 
 export default function Navbar() {
@@ -16,9 +22,12 @@ export default function Navbar() {
             </div>
             <div className="flex items-center space-x-4">
               <SignedOut>
-                <SignInButton>
-                  <Button>Sign In</Button>
+                <SignInButton mode="modal">
+                  <Button variant={"outline"}>Sign In</Button>
                 </SignInButton>
+                <SignUpButton mode="redirect">
+                  <Button>Get Started</Button>
+                </SignUpButton>
               </SignedOut>
               <SignedIn>
                 <UserButton />
