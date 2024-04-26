@@ -5,12 +5,13 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "@/server/api/trpc";
-import { posts } from "@/server/db/schema";
+import { posts, users } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 
 export const postRouter = createTRPCRouter({
-  hello: protectedProcedure.query(({ ctx }) => {
+  hello: publicProcedure.query(() => {
     return {
-      greeting: `Hello ${ctx.user?.firstName}`,
+      greeting: `Hello user`,
     };
   }),
 
@@ -30,4 +31,13 @@ export const postRouter = createTRPCRouter({
       orderBy: (posts, { desc }) => [desc(posts.createdAt)],
     });
   }),
+
+  userData: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ ctx, input }) => {
+      const user = ctx.db.query.users.findFirst({
+        where: eq(users.userId, input.id),
+      });
+      return user;
+    }),
 });
